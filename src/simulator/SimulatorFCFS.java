@@ -40,7 +40,7 @@ public class SimulatorFCFS {
         }
 
         print("*** Results ***");
-        Config.getSimulationClock().toString();
+        print(Config.getSimulationClock().toString());
     }
 
     private static void print(String s){
