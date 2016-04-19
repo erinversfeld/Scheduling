@@ -18,12 +18,13 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     //this is just a place holder. should be set to the appropriate value elsewhere
     private Instruction current_instruction = new CPUInstruction(0);
 
-    public ProcessControlBlockImpl(int pid){
+    public ProcessControlBlockImpl(String filename, int pid){
+        this.programName = filename;
         this.pid = pid;
     }
 
     public static ProcessControlBlockImpl loadProgram(String filename, int pid) throws FileNotFoundException, IOException{
-        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(pid);
+        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename, pid);
 
         try{
             Scanner in = new Scanner(new File(filename));
