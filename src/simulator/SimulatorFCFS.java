@@ -20,6 +20,11 @@ public class SimulatorFCFS {
         int trace_level = s.nextInt();
         s.close();
 
+        //check if there'll be a trace printed out
+        if (trace_level>0){
+            print("*** Trace ***");
+        }
+
         EventQueue eventQueue = new EventQueue();
         SystemTimerImpl systemTimer = new SystemTimerImpl();
         Kernel kernel = new FCFSKernel();
@@ -33,11 +38,6 @@ public class SimulatorFCFS {
 
         CPU cpu = Config.getCPU();
         SimulationClock simulationClock = Config.getSimulationClock();
-
-        //check if there'll be a trace printed out
-        if (trace_level>0){
-            print("*** Trace ***");
-        }
 
         print("*** Results ***");
         print(Config.getSimulationClock().toString());
