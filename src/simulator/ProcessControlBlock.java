@@ -11,8 +11,6 @@ import java.io.IOException;
  */
 public interface ProcessControlBlock {
 
-    ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException;
-
     /**
      * Possible process states.
      */

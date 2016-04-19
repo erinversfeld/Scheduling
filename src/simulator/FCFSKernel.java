@@ -32,7 +32,8 @@ public class FCFSKernel implements Kernel {
     private ProcessControlBlock dispatch() {
 		// Perform context switch, swapping process
         Config.getSimulationClock().logContextSwitch();
-        ProcessControlBlock prev_process = Config.getCPU().contextSwitch(Config.getCPU().getCurrentProcess());
+        ProcessControlBlock new_process = readyQueue.poll();
+        ProcessControlBlock prev_process = Config.getCPU().contextSwitch(new_process);
 		// currently on CPU with one at front of ready queue.
 		// If ready queue empty then CPU goes idle ( holds a null value).
         if(readyQueue.poll()==null){
@@ -104,8 +105,8 @@ public class FCFSKernel implements Kernel {
         Config.getSimulationClock().logSystemCall();
         return result;
     }
-   
-    
+
+
     public void interrupt(int interruptType, Object... varargs){
         switch (interruptType) {
             case TIME_OUT:
@@ -129,12 +130,11 @@ public class FCFSKernel implements Kernel {
         Config.getSimulationClock().logInterrupt();
     }
     
-    private ProcessControlBlock loadProgram(String filename) {
+    private static ProcessControlBlock loadProgram(String filename) {
         try {
             int new_pcb_pid = pid;
             pid++;
-            ProcessControlBlock pcb = new ProcessControlBlockImpl(pid);
-            return pcb.loadProgram(filename);
+            return ProcessControlBlockImpl.loadProgram(filename, new_pcb_pid);
 
         }
         catch (FileNotFoundException fileExp) {

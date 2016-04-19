@@ -25,8 +25,6 @@ public class SimulatorFCFS {
             print("*** Trace ***");
         }
 
-        EventQueue eventQueue = new EventQueue();
-        SystemTimerImpl systemTimer = new SystemTimerImpl();
         Kernel kernel = new FCFSKernel();
 
         //init trace
@@ -40,7 +38,7 @@ public class SimulatorFCFS {
         print("*** Results ***");
         print(Config.getSimulationClock().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches());
-        print("CPU utilization: "+(float)Config.getSimulationClock().getUserTime()/Config.getSimulationClock().getSystemTime()*100);
+        print("CPU utilization: "+((double)Config.getSimulationClock().getUserTime())/Config.getSimulationClock().getSystemTime()*100);
     }
 
     private static void print(String s){

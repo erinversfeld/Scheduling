@@ -13,18 +13,20 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     private String programName;
     private int priority;
     private int pid;
-    private Instruction current_instruction;
     private State state;
     private LinkedList<Instruction> instructions = new LinkedList<Instruction>();
+    //this is just a place holder. should be set to the appropriate value elsewhere
+    private Instruction current_instruction = new CPUInstruction(0);
 
     public ProcessControlBlockImpl(int pid){
         this.pid = pid;
     }
 
-    public ProcessControlBlockImpl loadProgram(String filename) throws FileNotFoundException, IOException{
+    public static ProcessControlBlockImpl loadProgram(String filename, int pid) throws FileNotFoundException, IOException{
+        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(pid);
+
         try{
             Scanner in = new Scanner(new File(filename));
-            this.programName = in.nextLine().replace("#", "").trim();
 
             while(in.hasNext()){
                 String[] line_entries = in.nextLine().trim().split(" ");
@@ -33,12 +35,10 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
                     continue;
                 }
                 else if(begin.equalsIgnoreCase("CPU")){
-                    for(int i = 0; i<line_entries.length; i++){
-                    System.out.println(line_entries[i]);}
-                    this.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
+                    pcb.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
                 }
                 else if(begin.equalsIgnoreCase("IO")){
-                    this.instructions.add(new IOInstruction(Integer.parseInt(line_entries[1]), Integer.parseInt(line_entries[2])));
+                    pcb.instructions.add(new IOInstruction(Integer.parseInt(line_entries[1]), Integer.parseInt(line_entries[2])));
                 }
                 else{
                     System.out.println("Something is wrong, this line is not parse-able: "+line_entries);
@@ -52,7 +52,8 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         catch (IOException ioe){
             throw ioe;
         }
-        return this;
+        pcb.current_instruction = pcb.instructions.peek();
+        return pcb;
     }
 
     @Override
