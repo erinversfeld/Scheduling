@@ -1,4 +1,8 @@
-package simulator; 
+package simulator;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Abstract Description of Process Control Block used by kernel and simulator.
  * 
@@ -6,6 +10,8 @@ package simulator;
  * @version 8/3/2015
  */
 public interface ProcessControlBlock {
+
+    ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException;
 
     /**
      * Possible process states.

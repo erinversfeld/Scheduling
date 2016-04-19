@@ -35,6 +35,10 @@ public class IODevice {
      * Obtain the device id.
      */
     public int getID() { return ID; }
+
+    public ProcessControlBlock getProcess(){
+        return queue.get(ID);
+    }
     
     long getFreeTime() { return freeTime; }
     void setFreeTime(long systemTime) { freeTime = systemTime; }
