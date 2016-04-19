@@ -6,9 +6,7 @@ import java.io.IOException;
 //
 import java.util.*;
 
-import static simulator.ProcessControlBlock.State.READY;
-import static simulator.ProcessControlBlock.State.TERMINATED;
-import static simulator.ProcessControlBlock.State.WAITING;
+import static simulator.ProcessControlBlock.State.*;
 
 /**
  * Concrete Kernel type
@@ -30,17 +28,18 @@ public class FCFSKernel implements Kernel {
     }
     
     private ProcessControlBlock dispatch() {
-		// Perform context switch, swapping process
-        Config.getSimulationClock().logContextSwitch();
-        ProcessControlBlock new_process = readyQueue.poll();
-        ProcessControlBlock prev_process = Config.getCPU().contextSwitch(new_process);
-		// currently on CPU with one at front of ready queue.
-		// If ready queue empty then CPU goes idle ( holds a null value).
-        if(readyQueue.poll()==null){
-            Config.getCPU().isIdle();
-            return null;
+        ProcessControlBlock prev_process = Config.getCPU().getCurrentProcess();
+        ProcessControlBlock next_process;
+
+        if(readyQueue.isEmpty()){
+           //set cpu to idle
+            Config.getCPU().contextSwitch(null);
         }
-		// Returns process removed from CPU.
+        else{
+            next_process = readyQueue.poll();
+            Config.getCPU().contextSwitch(next_process);
+            next_process.setState(RUNNING);
+        }
         return prev_process;
 	}
             
