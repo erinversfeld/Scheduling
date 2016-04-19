@@ -46,6 +46,6 @@ public class SimulatorFCFS {
     }
 
     private static void print(String s){
-        System.out.println(s);
+        System.out.println(s.trim());
     }
 }
