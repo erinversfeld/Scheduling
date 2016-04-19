@@ -101,7 +101,6 @@ public class FCFSKernel implements Kernel {
              default:
                 result = -1;
         }
-        Config.getSimulationClock().logSystemCall();
         return result;
     }
 
@@ -126,7 +125,6 @@ public class FCFSKernel implements Kernel {
             default:
                 throw new IllegalArgumentException("FCFSKernel:interrupt("+interruptType+"...): unknown type.");
         }
-        Config.getSimulationClock().logInterrupt();
     }
     
     private static ProcessControlBlock loadProgram(String filename) {

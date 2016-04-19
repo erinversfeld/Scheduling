@@ -135,7 +135,7 @@ public class CPU  {
             return "{Idle}";
         }
         else {
-            return toString(process);
+            return process.toString();
         }
     }
   
