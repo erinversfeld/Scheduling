@@ -23,6 +23,11 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         this.pid = pid;
     }
 
+    @Override
+    public String toString(){
+        return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";
+    }
+
     public static ProcessControlBlockImpl loadProgram(String filename, int pid) throws FileNotFoundException, IOException{
         ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename, pid);
 

@@ -38,7 +38,7 @@ public class SimulatorFCFS {
         print("*** Results ***");
         print(Config.getSimulationClock().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches());
-        print("CPU utilization: "+((double)Config.getSimulationClock().getUserTime())/Config.getSimulationClock().getSystemTime()*100);
+        System.out.printf("CPU utilization: %.2f\n", ((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
 
     private static void print(String s){
