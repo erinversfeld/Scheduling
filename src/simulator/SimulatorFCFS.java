@@ -34,7 +34,13 @@ public class SimulatorFCFS {
         CPU cpu = Config.getCPU();
         SimulationClock simulationClock = Config.getSimulationClock();
 
+        //check if there'll be a trace printed out
+        if (trace_level>0){
+            print("*** Trace ***");
+        }
 
+        print("*** Results ***");
+        Config.getSimulationClock().toString();
     }
 
     private static void print(String s){
