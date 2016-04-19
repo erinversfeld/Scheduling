@@ -18,11 +18,13 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     private LinkedList<Instruction> instructions;
 
     public ProcessControlBlockImpl(String filename, int pid){
+        this.programName = filename;
         this.pid = pid;
     }
 
     public static ProcessControlBlockImpl loadProgram(String filename, int pid) throws FileNotFoundException, IOException{
         ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename, pid);
+        pcb.instructions = new LinkedList<Instruction>();
         try{
             Scanner in = new Scanner(new File(filename));
             while(in.hasNext()){
@@ -32,6 +34,8 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
                     continue;
                 }
                 else if(begin.equals("CPU")){
+                    for(int i = 0; i<line_entries.length; i++){
+                    System.out.println(line_entries[i]);}
                     pcb.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
                 }
                 else if(begin.equals("IO")){
@@ -49,6 +53,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         catch (IOException ioe){
             throw ioe;
         }
+        pcb.current_instruction = pcb.instructions.getFirst();
         return pcb;
     }
 
