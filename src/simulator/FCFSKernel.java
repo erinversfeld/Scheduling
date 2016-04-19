@@ -17,9 +17,9 @@ public class FCFSKernel implements Kernel {
 
     //changed to a linkedlist because it's less complex
     private LinkedList<ProcessControlBlock> readyQueue;
-    //stuff that the config handles
-    //private HashMap<Integer, IODevice> = Config.devices;
-        
+    //this is a bad idea, but so is implementing an OS in Java
+    private static int pid;
+
     public FCFSKernel() {
 		// Set up the ready queue.
         this.readyQueue = new LinkedList<ProcessControlBlock>();
@@ -27,6 +27,8 @@ public class FCFSKernel implements Kernel {
     
     private ProcessControlBlock dispatch() {
 		// Perform context switch, swapping process
+        ProcessControlBlock prev_process = Config.getCPU().contextSwitch(readyQueue.pop());
+        Config.getCPU().getCurrentProcess().setState(ProcessControlBlock.State.RUNNING);
 		// currently on CPU with one at front of ready queue.
 		// If ready queue empty then CPU goes idle ( holds a null value).
         if(readyQueue.poll()==null){
@@ -34,7 +36,7 @@ public class FCFSKernel implements Kernel {
             return null;
         }
 		// Returns process removed from CPU.
-        return Config.getCPU().contextSwitch(readyQueue.poll());
+        return prev_process;
 	}
             
     
@@ -121,15 +123,17 @@ public class FCFSKernel implements Kernel {
     }
     
     private static ProcessControlBlock loadProgram(String filename) {
-/*        try {
-            return ProcessControlBlockImpl.loadProgram(filename);
+        try {
+            int new_pcb_pid = pid;
+            pid++;
+            return ProcessControlBlockImpl.loadProgram(filename, new_pcb_pid);
+
         }
         catch (FileNotFoundException fileExp) {
             return null;
         }
         catch (IOException ioExp) {
             return null;
-        }*/
-        return null;
+        }
     }
 }
