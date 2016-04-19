@@ -49,11 +49,13 @@ class SimulationClock implements EventHandler<TimeOutEvent>, SystemTimer {
     private long systemTime;
     private long kernelTime;
     private long userTime;    
-    
+    private long idleTime;
+
     public SimulationClock(int sysCallCost, int cSwitchCost) {
         this.systemTime = 0;
         this.kernelTime = 0;
         this.userTime = 0;
+        this.idleTime = 0;
         pendingTimeouts = new HashMap<TimeOutEvent, InterruptHandler>();
 
         this.SYSCALL_COST=sysCallCost;
@@ -111,5 +113,11 @@ class SimulationClock implements EventHandler<TimeOutEvent>, SystemTimer {
         stringBuilder.append("Idle time: "+(this.getSystemTime()-(this.getKernelTime()+this.getUserTime())));
         return stringBuilder.toString();
     }
-        
+
+    public void advanceIdleTime(long time) {
+        //added in this method so that i can just keep track of idle time rather than calculate it at the end
+        assert(time>=0);
+        idleTime+=time;
+        advanceSystemTime(time);
+    }
 }

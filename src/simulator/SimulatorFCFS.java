@@ -3,7 +3,7 @@ package simulator;
 import java.util.Scanner;
 
 /**
- * Created by Dave on 18/04/2016.
+ * Created by Erin on 18/04/2016.
  */
 public class SimulatorFCFS {
 
@@ -21,12 +21,19 @@ public class SimulatorFCFS {
         s.close();
 
         EventQueue eventQueue = new EventQueue();
-        SystemTimerImpl systemTimer = new SystemTimerImpl(eventQueue);
-        Kernel kernel = new FCFSKernel(systemTimer);
+        SystemTimerImpl systemTimer = new SystemTimerImpl();
+        Kernel kernel = new FCFSKernel();
+
+        //init trace
+        TRACE.SET_TRACE_LEVEL(trace_level);
 
         //init config
         Config.init(kernel, cost_context_switch, cost_syscall);
         Config.buildConfiguration(config_filename);
+
+        CPU cpu = Config.getCPU();
+        SimulationClock simulationClock = Config.getSimulationClock();
+
 
     }
 

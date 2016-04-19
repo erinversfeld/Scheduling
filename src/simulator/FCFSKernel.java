@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 //
 import java.util.ArrayDeque;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -18,17 +19,24 @@ public class FCFSKernel implements Kernel {
 
     //changed to a linkedlist because it's less complex
     private LinkedList<ProcessControlBlock> readyQueue;
+    //stuff that the config handles
+    //private HashMap<Integer, IODevice> = Config.devices;
         
-    public FCFSKernel(SystemTimer systemTimer) {
+    public FCFSKernel() {
 		// Set up the ready queue.
+        this.readyQueue = new LinkedList<ProcessControlBlock>();
     }
     
     private ProcessControlBlock dispatch() {
 		// Perform context switch, swapping process
 		// currently on CPU with one at front of ready queue.
 		// If ready queue empty then CPU goes idle ( holds a null value).
+        if(readyQueue.poll()==null){
+            Config.getCPU().isIdle();
+            return null;
+        }
 		// Returns process removed from CPU.
-        return null;
+        return readyQueue.poll();
 	}
             
     
