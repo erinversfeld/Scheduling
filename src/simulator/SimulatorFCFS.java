@@ -35,9 +35,7 @@ public class SimulatorFCFS {
         //init config
         Config.init(kernel, cost_context_switch, cost_syscall);
         Config.buildConfiguration(config_filename);
-
-        CPU cpu = Config.getCPU();
-        SimulationClock simulationClock = Config.getSimulationClock();
+        Config.run();
 
         print("*** Results ***");
         print(Config.getSimulationClock().toString());
