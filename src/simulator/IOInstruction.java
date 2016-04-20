@@ -1,7 +1,6 @@
 package simulator; 
 /**
  * Abstract representation of a block of program code describing an I/O burst.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */

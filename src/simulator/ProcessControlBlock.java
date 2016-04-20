@@ -60,7 +60,7 @@ public interface ProcessControlBlock {
     
     /**
      * Set process state.
-     * Requires <code>getState()!=State.TERMINATED</code>.
+     * Requires getState()!=State.TERMINATED.
      */
     void setState(State state);
     
