@@ -11,14 +11,15 @@ import java.util.Scanner;
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
     private String programName;
-    private int priority;
-    private int pid;
+    private int priority = -1;
+    private static int pid = 1;
+    private int prog_counter = 0;
     private State state;
     private LinkedList<Instruction> instructions = new LinkedList<Instruction>();
+    private Instruction curr_instruction;
 
-    public ProcessControlBlockImpl(String filename, int pid){
+    public ProcessControlBlockImpl(String filename){
         this.programName = filename;
-        this.pid = pid;
     }
 
     @Override
@@ -26,8 +27,12 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";
     }
 
-    public static ProcessControlBlockImpl loadProgram(String filename, int pid) throws FileNotFoundException, IOException{
-        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename, pid);
+    public void start(){
+        curr_instruction = instructions.get(prog_counter);
+    }
+
+    public static ProcessControlBlockImpl loadProgram(String filename) throws FileNotFoundException, IOException{
+        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
 
         try{
             Scanner in = new Scanner(new File(filename));
@@ -54,7 +59,6 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
 
                 }
             }
-            return pcb;
         }
         catch (FileNotFoundException fnfe){
             throw fnfe;
@@ -62,6 +66,9 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         catch (IOException ioe){
             throw ioe;
         }
+        pid++;
+        pcb.start();
+        return pcb;
     }
 
     @Override
