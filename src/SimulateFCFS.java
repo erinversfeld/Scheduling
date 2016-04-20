@@ -8,7 +8,7 @@ import java.util.Scanner;
  * A class for simulating the scheduling of processes on an operating system
  */
 
-public class SimulatorFCFS {
+public class SimulateFCFS {
     public static void main(String[] args){
         //Get user input
         System.out.println("*** FCFS Simulator ***");
