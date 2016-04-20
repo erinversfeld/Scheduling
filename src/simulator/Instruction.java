@@ -1,7 +1,6 @@
 package simulator; 
 /**
  * Representation of program instruction in abstract.
- * 
  * @author Stephan Jamieson
  * @version 12/3/2016
  */
