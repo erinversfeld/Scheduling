@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
- * Created by Erin on 4/18/2016.
+ * A representation of a program as a series of instructions
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
     private static int pid = 0;

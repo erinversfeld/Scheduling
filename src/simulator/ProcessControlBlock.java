@@ -2,7 +2,6 @@ package simulator;
 
 /**
  * Abstract Description of Process Control Block used by kernel and simulator.
- * 
  * @author Stephan Jamieson
  * @version 8/3/2015
  */
