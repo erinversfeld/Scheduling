@@ -1,7 +1,6 @@
  package simulator; 
 /**
  * Abstract class Event - write a description of the class here
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
