@@ -3,31 +3,36 @@ package simulator;
 import java.util.Scanner;
 
 /**
- * Created by Erin on 18/04/2016.
+ * Created by Jacques on 4/18/2016.
  */
 public class SimulatorFCFS {
-
     public static void main(String[] args){
-        print("*** FCFS ***");
-        Scanner s = new Scanner(System.in);
-        print("Enter configuration file name: ");
-        String config_filename = s.nextLine();
-        print("Enter cost of system call: ");
-        int cost_syscall = s.nextInt();
-        print("Enter cost of context switch: ");
-        int cost_context_switch = s.nextInt();
-        print("Enter trace level: ");
-        int trace_level = s.nextInt();
-        s.close();
+        //Read info from screen/user
+        System.out.println("*** FCFS Simulator ***");
+        Scanner scan = new Scanner(System.in);
+        //File name
+       print("Enter configuration file name: ");
+        String config_filename = scan.nextLine();
+        //System call cost
+       print("Enter cost of system call: ");
+        int cost_syscall = scan.nextInt();
+        //Content switch cost
+        System.out.print("Enter cost of context switch: ");
+        int cost_context_switch = scan.nextInt();
+        //Trace level
+       print("Enter trace level: ");
+        int trace_level = scan.nextInt();
+        scan.close();
 
-        //check if there'll be a trace printed out
+        //Determine if there is a trace level, if so print trace
         if (trace_level>0){
-            print("*** Trace ***");
+            System.out.println("\n*** Trace ***");
         }
 
-//        EventQueue eventQueue = new EventQueue();
-//        SystemTimerImpl systemTimer = new SystemTimerImpl();
-        final Kernel kernel = new FCFSKernel();
+        //init eventQ, SystemTimer and kernel
+        EventQueue eventQueue = new EventQueue();
+        SystemTimerImpl systemTimer = new SystemTimerImpl();
+        Kernel kernel = new FCFSKernel();
 
         //init trace
         TRACE.SET_TRACE_LEVEL(trace_level);
@@ -37,13 +42,13 @@ public class SimulatorFCFS {
         Config.buildConfiguration(config_filename);
         Config.run();
 
-        print("*** Results ***");
-        print(Config.getSimulationClock().toString());
-        print("Context switches: "+Config.getCPU().getContextSwitches());
-        System.out.printf("CPU utilization: %.2f\n", ((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
+        System.out.println("\n*** Results ***");
+        System.out.println(Config.getSimulationClock().toString());
+        print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
+        System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
 
-    private static void print(String s){
-        System.out.println(s.trim());
+    public static void print(String s){
+        System.out.print(s);
     }
 }
