@@ -77,7 +77,8 @@ public class FCFSKernel implements Kernel {
             break;
             case TERMINATE_PROCESS:
             {
-                Config.getCPU().getCurrentProcess().setState(TERMINATED);
+                ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
+                pcb.setState(TERMINATED);
                 dispatch();
             }
             break;
