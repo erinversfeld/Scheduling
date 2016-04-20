@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Scanner;
 /**
  * The class manages the configuration and running of a simulation.
- * <p>
  * It collates the hardware components: clock, cpu, and I/O devices.;
  * Classes such as concrete Kernels can access these components here. 
  * 
