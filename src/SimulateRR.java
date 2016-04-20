@@ -1,36 +1,34 @@
-import simulator.Config;
-import simulator.Kernel;
-import simulator.TRACE;
+import simulator.*;
 
 import java.util.Scanner;
 
 /**
- * Created by Dave on 20/04/2016.
+ * A class for simulating the scheduling of processes on an operating system
  */
 public class SimulateRR {
     public static void main(String[] args){
-        //Get user input
+        //Read info from screen/user
         System.out.println("*** FCFS Simulator ***");
-        Scanner input = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         print("Enter configuration file name: ");
-        String config_filename = input.nextLine();
-        print("Enter slice time: ");
-        int slice = input.nextInt();
+        String config_filename = scan.nextLine();
+        print ("Enter slice time: ");
+        int timeSlice = scan.nextInt();
         print("Enter cost of system call: ");
-        int cost_syscall = input.nextInt();
-        System.out.print("Enter cost of context switch: ");
-        int cost_context_switch = input.nextInt();
+        int cost_syscall = scan.nextInt();
+        print("Enter cost of context switch: ");
+        int cost_context_switch = scan.nextInt();
         print("Enter trace level: ");
-        int trace_level = input.nextInt();
-        input.close();
+        int trace_level = scan.nextInt();
+        scan.close();
 
-        //if there's a trace, print this line
+        //Print trace level if asked for one
         if (trace_level>0){
             System.out.println("\n*** Trace ***");
         }
 
         //init kernel
-        Kernel kernel = new KernelRR(slice);
+        Kernel kernel = new KernelRR(timeSlice);
 
         //init trace
         TRACE.SET_TRACE_LEVEL(trace_level);
@@ -40,18 +38,13 @@ public class SimulateRR {
         Config.buildConfiguration(config_filename);
         Config.run();
 
-        //output
         System.out.println("\n*** Results ***");
         System.out.println(Config.getSystemTimer().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
         System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
-    }
 
-    /**
-     * A helper method to prvent me typing out that long as line each time
-     * @param s the string you want printed
-     */
-    public static void print(String s){
+    }
+    private static void print(String s){
         System.out.print(s);
     }
 }
