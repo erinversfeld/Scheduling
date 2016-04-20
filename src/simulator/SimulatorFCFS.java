@@ -25,7 +25,9 @@ public class SimulatorFCFS {
             print("*** Trace ***");
         }
 
-        Kernel kernel = new FCFSKernel();
+        EventQueue eventQueue = new EventQueue();
+        SystemTimerImpl systemTimer = new SystemTimerImpl();
+        final Kernel kernel = new FCFSKernel();
 
         //init trace
         TRACE.SET_TRACE_LEVEL(trace_level);

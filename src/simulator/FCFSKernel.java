@@ -1,5 +1,4 @@
 package simulator;
-import simulator.*;
 //
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,25 +17,25 @@ public class FCFSKernel implements Kernel {
     
 
     //changed to a linkedlist because it's less complex
-    private LinkedList<ProcessControlBlock> readyQueue;
+    private Deque<ProcessControlBlock> readyQueue;
     //this is a bad idea, but so is implementing an OS in Java
     private static int pid = 1;
 
     public FCFSKernel() {
 		// Set up the ready queue.
-        this.readyQueue = new LinkedList<ProcessControlBlock>();
+        this.readyQueue = new ArrayDeque<>();
     }
     
     private ProcessControlBlock dispatch() {
-        ProcessControlBlock prev_process = Config.getCPU().getCurrentProcess();
-        ProcessControlBlock next_process;
+        ProcessControlBlockImpl prev_process = (ProcessControlBlockImpl)Config.getCPU().getCurrentProcess();
+        ProcessControlBlockImpl next_process;
 
         if(readyQueue.isEmpty()){
            //set cpu to idle
             Config.getCPU().contextSwitch(null);
         }
         else{
-            next_process = readyQueue.poll();
+            next_process = (ProcessControlBlockImpl)readyQueue.pollFirst();
             Config.getCPU().contextSwitch(next_process);
             next_process.setState(RUNNING);
         }
@@ -56,11 +55,11 @@ public class FCFSKernel implements Kernel {
                 break;
              case EXECVE: 
                 {
-                    ProcessControlBlock pcb = this.loadProgram((String)varargs[0]);
+                    ProcessControlBlockImpl pcb = (ProcessControlBlockImpl)this.loadProgram((String)varargs[0]);
                     if (pcb!=null) {
                         // Loaded successfully.
 						// Now add to end of ready queue.
-                        readyQueue.add(pcb);
+                        readyQueue.addLast(pcb);
 						// If CPU idle then call dispatch.
                         if(Config.getCPU().isIdle()){
                             dispatch();
@@ -75,7 +74,7 @@ public class FCFSKernel implements Kernel {
                 {
 					// IO request has come from process currently on the CPU.
 					// Get PCB from CPU.
-                    ProcessControlBlock cpuPCB = Config.getCPU().getCurrentProcess();
+                    ProcessControlBlockImpl cpuPCB = (ProcessControlBlockImpl)Config.getCPU().getCurrentProcess();
 					// Find IODevice with given ID: Config.getDevice((Integer)varargs[0]);
                     IODevice ioDevice = Config.getDevice((Integer)varargs[0]);
 					// Make IO request on device providing burst time (varages[1]),
@@ -91,7 +90,7 @@ public class FCFSKernel implements Kernel {
                 {
 					// Process on the CPU has terminated.
 					// Get PCB from CPU.
-                    ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
+                    ProcessControlBlockImpl pcb = (ProcessControlBlockImpl)Config.getCPU().getCurrentProcess();
 					// Set status to TERMINATED.
                     pcb.setState(TERMINATED);
                     // Call dispatch().
@@ -112,11 +111,10 @@ public class FCFSKernel implements Kernel {
             case WAKE_UP:
 				// IODevice has finished an IO request for a process.
 				// Retrieve the PCB of the process (varargs[1]), set its state
-                IODevice ioDevice = Config.getDevice(Integer.parseInt(""+varargs[1]));
-                ProcessControlBlock pcb = ioDevice.getProcess();
                 // to READY, put it on the end of the ready queue.
+                ProcessControlBlockImpl pcb = (ProcessControlBlockImpl)varargs[1];
                 pcb.setState(READY);
-                readyQueue.add(pcb);
+                readyQueue.addLast(pcb);
 				// If CPU is idle then dispatch().
                 if(Config.getCPU().isIdle()){
                     dispatch();

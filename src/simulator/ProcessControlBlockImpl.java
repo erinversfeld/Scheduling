@@ -15,8 +15,6 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     private int pid;
     private State state;
     private LinkedList<Instruction> instructions = new LinkedList<Instruction>();
-    //this is just a place holder. should be set to the appropriate value elsewhere
-    private Instruction current_instruction = new CPUInstruction(0);
 
     public ProcessControlBlockImpl(String filename, int pid){
         this.programName = filename;
@@ -35,22 +33,28 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
             Scanner in = new Scanner(new File(filename));
 
             while(in.hasNext()){
-                String[] line_entries = in.nextLine().trim().split(" ");
-                String begin = line_entries[0];
-                if(begin.equals("#")){
+                String line = in.nextLine();
+                char begin = line.charAt(0);
+                if (begin == '#') {
                     continue;
                 }
-                else if(begin.equalsIgnoreCase("CPU")){
-                    pcb.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
-                }
-                else if(begin.equalsIgnoreCase("IO")){
-                    pcb.instructions.add(new IOInstruction(Integer.parseInt(line_entries[1]), Integer.parseInt(line_entries[2])));
-                }
                 else{
-                    System.out.println("Something is wrong, this line is not parse-able: "+line_entries);
-                    System.exit(1);
+                    String[] line_entries = line.trim().split(" ");
+                    String first_word = line_entries[0];
+                    if(first_word.equalsIgnoreCase("CPU")){
+                        pcb.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
+                    }
+                    else if(first_word.equalsIgnoreCase("IO")){
+                        pcb.instructions.add(new IOInstruction(Integer.parseInt(line_entries[1]), Integer.parseInt(line_entries[2])));
+                    }
+                    else{
+                        System.out.println("Something is wrong, this line is not parse-able: "+line_entries);
+                        System.exit(1);
+                    }
+
                 }
             }
+            return pcb;
         }
         catch (FileNotFoundException fnfe){
             throw fnfe;
@@ -58,8 +62,6 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         catch (IOException ioe){
             throw ioe;
         }
-        pcb.current_instruction = pcb.instructions.peek();
-        return pcb;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
 
     @Override
     public Instruction getInstruction() {
-        return current_instruction;
+        return instructions.peek();
     }
 
     @Override
@@ -96,18 +98,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
 
     @Override
     public void nextInstruction() {
-        if(instructions.isEmpty()){
-            state = State.TERMINATED;
-        }
-        else{
-            current_instruction = instructions.poll();
-            if(current_instruction instanceof IOInstruction){
-                state = State.WAITING;
-            }
-            else{
-                state = State.READY;
-            }
-        }
+        instructions.poll();
     }
 
     @Override
