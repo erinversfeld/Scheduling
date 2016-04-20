@@ -160,8 +160,4 @@ public class CPU  {
      * Obtain the number of context switches.
      */
     public int getContextSwitches() { return contextSwitches; }
-
-    public static String toString(ProcessControlBlock process){
-        return "process(pid="+process.getPID()+", state="+process.getState()+", name=\""+process.getProgramName()+"\")";
-    }
 }
