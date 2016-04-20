@@ -1,7 +1,6 @@
  package simulator; 
 /**
  * A WakeUp event occurs when an I/O operation completes.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -39,5 +38,4 @@ class WakeUpEvent extends Event {
     }
     
     public String toString() { return "WakeUpEvent("+this.getTime()+", "+this.getDeviceID()+", "+this.getProcessID()+")"; }
-        
 }

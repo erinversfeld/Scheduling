@@ -5,7 +5,6 @@ import java.util.Scanner;
 //
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 //
 import simulator.Instruction;
 /**
@@ -23,7 +22,7 @@ public class ProgramGenerator {
     private int totalTime;
     
     /**
-     * @Param numInstructions - an odd number integer.
+     * @param numInstructions - an odd number integer.
      */
     public ProgramGenerator(String name, CPUGenerator cpuGen, IOGenerator ioGen, int numInstructions) {
         assert(numInstructions%2==1);

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 /**
  * Implementation of SystemTimer type.
- * 
  * @author Stephan Jamieson
  * @version 8/3/2015
  */

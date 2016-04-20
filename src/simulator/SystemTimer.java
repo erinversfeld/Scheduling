@@ -2,8 +2,7 @@ package simulator;
 /**
  * A SystemTimer (i) provides support for simulated time, and (ii) support for
  * the setting of timeout interrupts by kernel code. 
- * 
- * @author Stephan Jamieson 
+ * @author Stephan Jamieson
  * @version 8/3/2015
  */
 public interface SystemTimer  {
@@ -39,8 +38,4 @@ public interface SystemTimer  {
      * Cancel timer interrupt for given process ID.
      */
     void cancelInterrupt(int processID);
-    
-    
-    
-    
 }

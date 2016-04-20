@@ -1,7 +1,6 @@
 package simulator; 
 /**
  * System call interface for OS kernel.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -27,8 +26,7 @@ public interface SystemCall {
      * Terminate current process.
      */
     final static int TERMINATE_PROCESS = 4;
-    
-    
+
     /**
      *  Invoke the system call with the given number, providing zero or more arguments.
      */

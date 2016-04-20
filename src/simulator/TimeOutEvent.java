@@ -1,7 +1,6 @@
  package simulator; 
 /**
  * A timeout event is used to flag the end of the current execution time slice.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -23,7 +22,6 @@ class TimeOutEvent extends Event {
      * Obtain the process to switched out as a result of this execution timeout.
      */
     public int getProcessID() { return processID; }
-
 
     public void process() {
         handler.process(this);

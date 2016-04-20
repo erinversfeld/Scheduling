@@ -3,33 +3,30 @@ package simulator;
 import java.util.Scanner;
 
 /**
- * Created by Jacques on 4/18/2016.
+ * A class for simulating the scheduling of processes on an operating system
  */
+
 public class SimulatorFCFS {
     public static void main(String[] args){
-        //Read info from screen/user
+        //Get user input
         System.out.println("*** FCFS Simulator ***");
         Scanner input = new Scanner(System.in);
-        //File name
        print("Enter configuration file name: ");
         String config_filename = input.nextLine();
-        //System call cost
        print("Enter cost of system call: ");
         int cost_syscall = input.nextInt();
-        //Content switch cost
         System.out.print("Enter cost of context switch: ");
         int cost_context_switch = input.nextInt();
-        //Trace level
        print("Enter trace level: ");
         int trace_level = input.nextInt();
         input.close();
 
-        //Determine if there is a trace level, if so print trace
+        //if there's a trace, print this line
         if (trace_level>0){
             System.out.println("\n*** Trace ***");
         }
 
-        //init eventQ, SystemTimer and kernel
+        //init kernel
         Kernel kernel = new FCFSKernel();
 
         //init trace
@@ -40,12 +37,17 @@ public class SimulatorFCFS {
         Config.buildConfiguration(config_filename);
         Config.run();
 
+        //output
         System.out.println("\n*** Results ***");
         System.out.println(Config.getSimulationClock().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
         System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
 
+    /**
+     * A helper method to prvent me typing out that long as line each time
+     * @param s the string you want printed
+     */
     public static void print(String s){
         System.out.print(s);
     }

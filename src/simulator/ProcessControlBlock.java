@@ -1,8 +1,5 @@
 package simulator;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 /**
  * Abstract Description of Process Control Block used by kernel and simulator.
  * 

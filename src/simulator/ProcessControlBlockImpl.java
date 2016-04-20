@@ -68,11 +68,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
      */
     @Override
     public boolean hasNextInstruction() {
-        if(instructions.size()> program_counter +1){
-            return true;
-        }else{
-            return false;
-        }
+        return instructions.size() > program_counter + 1;
     }
 
     /**

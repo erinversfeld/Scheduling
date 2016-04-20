@@ -9,8 +9,7 @@ import static simulator.ProcessControlBlock.State.*;
 //
 
 /**
- * Concrete Kernel type
- *
+ * Concrete Kernel type for the execution of a first come first serve simulation of process scheduling in an operating system.
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -23,11 +22,11 @@ public class FCFSKernel implements Kernel {
     }
 
     private ProcessControlBlock dispatch() {
-        ProcessControlBlockImpl prev_process = (ProcessControlBlockImpl) Config.getCPU().getCurrentProcess();
-        ProcessControlBlockImpl next_process;
+        ProcessControlBlock prev_process = Config.getCPU().getCurrentProcess();
+        ProcessControlBlock next_process;
 
         if(!readyQueue.isEmpty()) {
-            next_process = (ProcessControlBlockImpl) readyQueue.poll();
+            next_process = readyQueue.poll();
             next_process.setState(READY);
             Config.getCPU().contextSwitch(next_process);
         }
@@ -65,7 +64,9 @@ public class FCFSKernel implements Kernel {
             case IO_REQUEST:
             {
                 ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
+                //get the appropriate ioDevice
                 IODevice ioDevice = Config.getDevice((Integer)varargs[0]);
+                //process the ioRequest
                 ioDevice.requestIO((Integer)varargs[1], pcb, this);
                 pcb.setState(WAITING);
                 dispatch();
@@ -88,7 +89,9 @@ public class FCFSKernel implements Kernel {
             case TIME_OUT:
                 throw new IllegalArgumentException("FCFSKernel:interrupt("+interruptType+"...): this kernel does not support timeouts.");
             case WAKE_UP:
-                ProcessControlBlockImpl pcb = (ProcessControlBlockImpl)varargs[1];
+                //huh, who would've known that you would have to cast an object to a pcb...
+                ProcessControlBlock pcb = (ProcessControlBlock)varargs[1];
+                //put the process back onto the readyQ
                 readyQueue.add(pcb);
                 if(Config.getCPU().isIdle()){
                     dispatch();
@@ -101,8 +104,7 @@ public class FCFSKernel implements Kernel {
 
     private static ProcessControlBlock loadProgram(String filename) {
         try {
-            ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
-            return pcb.loadProgram(filename);
+            return ProcessControlBlockImpl.loadProgram(filename);
         }
         catch (FileNotFoundException fileExp) {
             return null;
