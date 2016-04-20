@@ -6,7 +6,6 @@ import java.util.PriorityQueue;
  * Ordered Event queue for discrete event simulator.
  * Queue ordered by event time. 
  * Events may share the same time.
- * 
  * @author Stephan Jamieson
  * @version 08/3/2015
  */
@@ -38,8 +37,7 @@ class EventQueue {
 
     /**
      * Remove event at front of queue.
-     * 
-     * @return the event at the front of the queue or <code>null</code>. 
+     * @return the event at the front of the queue or <code>null</code>.
      */
     public Event poll() { return queue.poll(); }
 
