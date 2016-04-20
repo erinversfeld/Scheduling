@@ -27,12 +27,9 @@ public class CPU  {
     }
 
     /**
-     * Exeucte the current process in user space until it terminates or blocks for IO.
-     * <p>
-     * The CPU will update the system timer to indicate the amout of user time spent processing.
-     * <p>
+     * Execute the current process in user space until it terminates or blocks for IO.
+     * The CPU will update the system timer to indicate the amount of user time spent processing.
      * The method returns the quantity of time used.
-     * <p>
      * @return number of time units used.
      */
     int execute() {
@@ -69,14 +66,11 @@ public class CPU  {
     }
     /**
      * Execute the current process in user space for the given number of time units.
-     * <p>
-     * If the current cpu burst can complete in the given time, then the CPU will execute 
+     * If the current cpu burst can complete in the given time, then the CPU will execute
      * the next instruction in the 'program'. This must be a system call (either I/O or terminate).
      * Either will cause this process to be switched out.
-     * <p>
-     * The CPU will update the system timer to indicate the amout of user time spent processing.
-     * <p>
-     * The method returns the quantity of unused time unit. A value greater than zero means that 
+     * The CPU will update the system timer to indicate the amount of user time spent processing.
+     * The method returns the quantity of unused time unit. A value greater than zero means that
      * the current cpu burst was completed. A value of zero means the current cpu 
      * burst may or may not have completed.
      * 
@@ -126,7 +120,7 @@ public class CPU  {
     }
         
     /**
-     * Determine whether the CPU is idle (<code>getCurrentProcess()==null</code>).
+     * Determine whether the CPU is idle.
      */
     public boolean isIdle() { return currentProcess==null; }
     
@@ -141,7 +135,6 @@ public class CPU  {
   
     /**
      * Switch the current process out and the given process in. 
-     * 
      * @return the previously executing process.
      */    
     public ProcessControlBlock contextSwitch(ProcessControlBlock process) {
@@ -150,6 +143,7 @@ public class CPU  {
         currentProcess = process;
         TRACE.PRINTF(1, "Time: %010d Kernel: Context Switch %s, %s).\n", Config.getSimulationClock().getSystemTime(), format(out), format(process)); 
         Config.getSimulationClock().logContextSwitch();
+        //when a context switch occurs the process which is switched onto the CPU should start to run
         if(currentProcess!=null){
             currentProcess.setState(ProcessControlBlock.State.RUNNING);
         }
