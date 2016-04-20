@@ -1,7 +1,6 @@
  package simulator; 
 /**
  * An Execve event represents the creation of a program execution.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -17,8 +16,7 @@ class ExecveEvent extends Event {
         this.progName=progName;
         this.kernel=kernel;
     }
-        
-    
+
     /**
      * Obtain the name of the program that must be run.
      */
