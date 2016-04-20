@@ -1,4 +1,7 @@
-package simulator;
+import simulator.CPUInstruction;
+import simulator.IOInstruction;
+import simulator.Instruction;
+import simulator.ProcessControlBlock;
 
 import java.io.*;
 import java.util.LinkedList;

@@ -1,4 +1,7 @@
-package simulator;
+import simulator.Config;
+import simulator.IODevice;
+import simulator.Kernel;
+import simulator.ProcessControlBlock;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

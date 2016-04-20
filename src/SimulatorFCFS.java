@@ -1,4 +1,6 @@
-package simulator;
+import simulator.Config;
+import simulator.Kernel;
+import simulator.TRACE;
 
 import java.util.Scanner;
 
@@ -39,7 +41,7 @@ public class SimulatorFCFS {
 
         //output
         System.out.println("\n*** Results ***");
-        System.out.println(Config.getSimulationClock().toString());
+        System.out.println(Config.getSystemTimer().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
         System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
