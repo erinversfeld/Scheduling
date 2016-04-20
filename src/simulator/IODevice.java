@@ -3,10 +3,8 @@ import java.util.HashMap;
 import java.util.Map;
 /**
  * Simulation of an IO device. A device has an id and type name (e.g. 'printer'). Processes may make IO requests.
- * <p>
  * It is expected that an IO request is blocking i.e. the calling process will be removed from the CPU
  * while waiting for the request to complete.
- *
  * @author Stephan Jamieson
  * @version 8/3/15
  */

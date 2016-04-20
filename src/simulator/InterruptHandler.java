@@ -2,7 +2,6 @@ package simulator;
 /**
  * Interface for a kernel that handles interrupts
  * such as timeouts and completion of device I/O operations.
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
