@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * Created by Erin on 4/18/2016.
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
-    private static int PID = 1;
+    private static int PID = 0;
     private String programName;
     private int priority = -1;
     private Instruction curr_instruction;
