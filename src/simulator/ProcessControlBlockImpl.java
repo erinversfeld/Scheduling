@@ -1,120 +1,158 @@
 package simulator;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 /**
- * Created by Erin on 19/04/2016.
+ * Created by Erin on 4/18/2016.
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
+    private static int PID = 1;
     private String programName;
     private int priority = -1;
-    private static int pid = 1;
-    private int prog_counter = 0;
-    private State state;
-    private LinkedList<Instruction> instructions = new LinkedList<Instruction>();
     private Instruction curr_instruction;
+    private LinkedList<Instruction> instructions  = new LinkedList<Instruction>();
+    private int program_counter= 0;
+    private State state;
 
-    public ProcessControlBlockImpl(String filename){
-        this.programName = filename;
-    }
-
-    @Override
-    public String toString(){
-        return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";
+    public ProcessControlBlockImpl (String name){
+        this.PID = PID;
+        programName = name;
     }
 
     public void start(){
-        curr_instruction = instructions.get(prog_counter);
+        curr_instruction = instructions.get(program_counter);
     }
 
-    public static ProcessControlBlockImpl loadProgram(String filename) throws FileNotFoundException, IOException{
-        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
-
-        try{
-            Scanner in = new Scanner(new File(filename));
-
-            while(in.hasNext()){
-                String line = in.nextLine();
-                char begin = line.charAt(0);
-                if (begin == '#') {
-                    continue;
-                }
-                else{
-                    String[] line_entries = line.trim().split(" ");
-                    String first_word = line_entries[0];
-                    if(first_word.equalsIgnoreCase("CPU")){
-                        pcb.instructions.add(new CPUInstruction(Integer.parseInt(line_entries[1])));
-                    }
-                    else if(first_word.equalsIgnoreCase("IO")){
-                        pcb.instructions.add(new IOInstruction(Integer.parseInt(line_entries[1]), Integer.parseInt(line_entries[2])));
-                    }
-                    else{
-                        System.out.println("Something is wrong, this line is not parse-able: "+line_entries);
-                        System.exit(1);
-                    }
-
-                }
-            }
-        }
-        catch (FileNotFoundException fnfe){
-            throw fnfe;
-        }
-        catch (IOException ioe){
-            throw ioe;
-        }
-        pid++;
-        pcb.start();
-        return pcb;
+    public void add (Instruction in){
+        instructions.add(in);
     }
 
+    /**
+     * Obtain process ID.
+     */
     @Override
     public int getPID() {
-        return this.pid;
+        return PID;
     }
 
+    /**
+     * Obtain program name.
+     *
+     */
     @Override
     public String getProgramName() {
-        return this.programName;
+        return programName;
     }
 
+    /**
+     * Obtain process priority();
+     */
     @Override
     public int getPriority() {
-        return this.priority;
+        return priority;
     }
 
+    /**
+     * Set process priority(), returning the old value.
+     */
     @Override
     public int setPriority(int value) {
-        int old_priority = this.priority;
-        this.priority = value;
-        return old_priority;
+        int temp = priority;
+        priority = value;
+        return temp;
     }
 
+    /**
+     * Obtain current program 'instruction'.
+     */
     @Override
     public Instruction getInstruction() {
-        return instructions.peek();
+        return curr_instruction;
     }
 
+    /**
+     * Determine if there are any more instructions.
+     */
     @Override
     public boolean hasNextInstruction() {
-        return instructions.isEmpty();
+        if(instructions.size()> program_counter +1){
+            return true;
+        }else{
+            return false;
+        }
     }
 
+    /**
+     * Advance to next instruction.
+     */
     @Override
     public void nextInstruction() {
-        instructions.poll();
+        if(hasNextInstruction()) {
+            program_counter++;
+            curr_instruction = instructions.get(program_counter);
+        }
+        else{
+            curr_instruction = null;
+        }
     }
 
+    /**
+     * Obtain process state.
+     */
     @Override
     public State getState() {
         return state;
     }
 
+    /**
+     * Set process state.
+     * Requires <code>getState()!=State.TERMINATED</code>.
+     */
     @Override
     public void setState(State state) {
         this.state = state;
+    }
+
+    @Override
+    public String toString(){
+        return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";}
+
+
+    public static ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException{
+        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl (filename);
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+
+            while ((line=br.readLine())!= null) {
+                char begin = line.charAt(0);
+                //make sure the line isn't a comment or an empty line
+                if (begin!='#'&&String.valueOf(begin)!=String.valueOf("")){
+                    String[] line_entries = line.trim().split(" ");
+                    //check if  CPU or IO instruction
+                    if(line_entries[0].equalsIgnoreCase("CPU")){
+                        int duration = Integer.parseInt(line_entries[1]);
+                        pcb.add(new CPUInstruction(duration));
+                    }else if(line_entries[0].equalsIgnoreCase("IO")){
+                        int duration = Integer.parseInt(line_entries[1]);
+                        int deviceID = Integer.parseInt(line_entries[2]);
+                        IOInstruction tempInstruction = new IOInstruction(duration,deviceID);
+                        pcb.add(tempInstruction);
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException fnfe) {
+            throw fnfe;
+        } catch (IOException ie) {
+            throw ie;
+        }
+        PID++;
+        pcb.start();
+        return pcb;
     }
 }
