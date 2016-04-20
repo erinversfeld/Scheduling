@@ -36,8 +36,8 @@ public class FCFSKernel implements Kernel {
         }
         else{
             next_process = (ProcessControlBlockImpl)readyQueue.pollFirst();
+            next_process.setState(READY);
             Config.getCPU().contextSwitch(next_process);
-            next_process.setState(RUNNING);
         }
         return prev_process;
 	}

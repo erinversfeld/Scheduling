@@ -150,6 +150,9 @@ public class CPU  {
         currentProcess = process;
         TRACE.PRINTF(1, "Time: %010d Kernel: Context Switch %s, %s).\n", Config.getSimulationClock().getSystemTime(), format(out), format(process)); 
         Config.getSimulationClock().logContextSwitch();
+        if(currentProcess!=null){
+            currentProcess.setState(ProcessControlBlock.State.RUNNING);
+        }
         return out;
     }
     

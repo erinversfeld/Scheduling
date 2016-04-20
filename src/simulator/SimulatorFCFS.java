@@ -25,8 +25,8 @@ public class SimulatorFCFS {
             print("*** Trace ***");
         }
 
-        EventQueue eventQueue = new EventQueue();
-        SystemTimerImpl systemTimer = new SystemTimerImpl();
+//        EventQueue eventQueue = new EventQueue();
+//        SystemTimerImpl systemTimer = new SystemTimerImpl();
         final Kernel kernel = new FCFSKernel();
 
         //init trace
