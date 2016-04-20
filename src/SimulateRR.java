@@ -30,7 +30,7 @@ public class SimulateRR {
         }
 
         //init kernel
-        Kernel kernel = new FCFSKernel();
+        Kernel kernel = new KernelRR(slice);
 
         //init trace
         TRACE.SET_TRACE_LEVEL(trace_level);
