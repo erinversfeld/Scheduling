@@ -9,7 +9,6 @@ package simulator;
 public class CPUInstruction extends Instruction {
 
     private int burstRemaining;
-    
     public CPUInstruction(int duration) { super(duration); burstRemaining = duration; }
     
     /**
