@@ -1,7 +1,6 @@
  package simulator; 
 /**
  * Implementation of EventScheduler
- * 
  * @author Stephan Jamieson
  * @version 8/3/15
  */
