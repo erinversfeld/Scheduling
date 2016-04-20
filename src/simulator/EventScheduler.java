@@ -12,7 +12,6 @@ class EventScheduler {
     public EventScheduler() {
         this.queue = new EventQueue();
     }
-    
         
     public void schedule(final Event event) { 
         queue.add(event); 
