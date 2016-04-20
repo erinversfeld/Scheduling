@@ -1,16 +1,14 @@
 package simulator;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 /**
  * Created by Erin on 4/18/2016.
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
-    private static int PID = 0;
+    private static int pid = 0;
     private String programName;
     private int priority = -1;
     private Instruction curr_instruction;
@@ -19,16 +17,8 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     private State state;
 
     public ProcessControlBlockImpl (String name){
-        this.PID = PID;
+        this.pid = pid;
         programName = name;
-    }
-
-    public void start(){
-        curr_instruction = instructions.get(program_counter);
-    }
-
-    public void add (Instruction in){
-        instructions.add(in);
     }
 
     /**
@@ -36,12 +26,11 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
      */
     @Override
     public int getPID() {
-        return PID;
+        return pid;
     }
 
     /**
      * Obtain program name.
-     *
      */
     @Override
     public String getProgramName() {
@@ -110,25 +99,37 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
 
     /**
      * Set process state.
-     * Requires <code>getState()!=State.TERMINATED</code>.
+     * Requires getState()!=State.TERMINATED.
      */
     @Override
     public void setState(State state) {
         this.state = state;
     }
 
+    /**
+     * Obtain a string representation of a pcb
+     * @return String representation of the process according to the spec given in the design brief
+     */
     @Override
     public String toString(){
         return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";}
 
 
+    /**
+     * Load a program's instructions into a pcb
+     * @param filename the name of the program to be loaded
+     * @return the pcb with the loaded instructions
+     * @throws FileNotFoundException thrown by the scanner if the program file does not exist
+     * @throws IOException
+     */
     public static ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException{
         ProcessControlBlockImpl pcb = new ProcessControlBlockImpl (filename);
         try {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
+            Scanner input = new Scanner(new File(filename));
             String line;
 
-            while ((line=br.readLine())!= null) {
+            while (input.hasNext()) {
+                line = input.nextLine();
                 char begin = line.charAt(0);
                 //make sure the line isn't a comment or an empty line
                 if (begin!='#'&&String.valueOf(begin)!=String.valueOf("")){
@@ -136,12 +137,12 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
                     //check if  CPU or IO instruction
                     if(line_entries[0].equalsIgnoreCase("CPU")){
                         int duration = Integer.parseInt(line_entries[1]);
-                        pcb.add(new CPUInstruction(duration));
+                        pcb.instructions.add(new CPUInstruction(duration));
                     }else if(line_entries[0].equalsIgnoreCase("IO")){
                         int duration = Integer.parseInt(line_entries[1]);
                         int deviceID = Integer.parseInt(line_entries[2]);
                         IOInstruction tempInstruction = new IOInstruction(duration,deviceID);
-                        pcb.add(tempInstruction);
+                        pcb.instructions.add(tempInstruction);
                     }
                 }
             }
@@ -151,8 +152,9 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         } catch (IOException ie) {
             throw ie;
         }
-        PID++;
-        pcb.start();
+        //polish up the pcb before returning
+        pid++;
+        pcb.curr_instruction = pcb.instructions.get(pcb.program_counter);
         return pcb;
     }
 }
