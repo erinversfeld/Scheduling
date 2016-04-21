@@ -13,13 +13,13 @@ public class SimulateFCFS {
         //Get user input
         System.out.println("*** FCFS Simulator ***");
         Scanner input = new Scanner(System.in);
-       print("Enter configuration file name: ");
+        print("Enter configuration file name: ");
         String config_filename = input.nextLine();
-       print("Enter cost of system call: ");
+        print("Enter cost of system call: ");
         int cost_syscall = input.nextInt();
         System.out.print("Enter cost of context switch: ");
         int cost_context_switch = input.nextInt();
-       print("Enter trace level: ");
+        print("Enter trace level: ");
         int trace_level = input.nextInt();
         input.close();
 

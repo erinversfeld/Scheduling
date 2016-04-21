@@ -1,7 +1,4 @@
-import simulator.Config;
-import simulator.IODevice;
-import simulator.Kernel;
-import simulator.ProcessControlBlock;
+import simulator.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,23 +22,25 @@ public class FCFSKernel implements Kernel {
     }
 
     private ProcessControlBlock dispatch() {
-        ProcessControlBlock prev_process = Config.getCPU().getCurrentProcess();
+        CPU cpu = Config.getCPU();
+        ProcessControlBlock prev_process = cpu.getCurrentProcess();
         ProcessControlBlock next_process;
 
         if(!readyQueue.isEmpty()) {
             next_process = readyQueue.poll();
             next_process.setState(READY);
-            Config.getCPU().contextSwitch(next_process);
+            cpu.contextSwitch(next_process);
         }
         else{
 
-            Config.getCPU().contextSwitch(null);
+            cpu.contextSwitch(null);
         }
         return prev_process;
 
     }
 
     public int syscall(int number, Object... varargs) {
+        CPU cpu = Config.getCPU();
         int result = 0;
         switch (number) {
             case MAKE_DEVICE:
@@ -55,7 +54,7 @@ public class FCFSKernel implements Kernel {
                 ProcessControlBlock pcb = loadProgram((String)varargs[0]);
                 if (pcb!=null) {
                     readyQueue.add(pcb);
-                    if (Config.getCPU().isIdle()){
+                    if (cpu.isIdle()){
                         dispatch();
                     }
                 }
@@ -66,7 +65,7 @@ public class FCFSKernel implements Kernel {
             break;
             case IO_REQUEST:
             {
-                ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
+                ProcessControlBlock pcb = cpu.getCurrentProcess();
                 //get the appropriate ioDevice
                 IODevice ioDevice = Config.getDevice((Integer)varargs[0]);
                 //process the ioRequest
@@ -77,7 +76,7 @@ public class FCFSKernel implements Kernel {
             break;
             case TERMINATE_PROCESS:
             {
-                ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
+                ProcessControlBlock pcb = cpu.getCurrentProcess();
                 pcb.setState(TERMINATED);
                 dispatch();
             }
@@ -89,6 +88,7 @@ public class FCFSKernel implements Kernel {
     }
 
     public void interrupt(int interruptType, Object... varargs){
+        CPU cpu = Config.getCPU();
         switch (interruptType) {
             case TIME_OUT:
                 throw new IllegalArgumentException("FCFSKernel:interrupt("+interruptType+"...): this kernel does not support timeouts.");
@@ -97,7 +97,7 @@ public class FCFSKernel implements Kernel {
                 ProcessControlBlock pcb = (ProcessControlBlock)varargs[1];
                 //put the process back onto the readyQ
                 readyQueue.add(pcb);
-                if(Config.getCPU().isIdle()){
+                if(cpu.isIdle()){
                     dispatch();
                 }
                 break;
