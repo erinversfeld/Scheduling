@@ -1,10 +1,8 @@
 import simulator.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 /**
  * Created by Erin on 4/18/2016.
@@ -123,12 +121,12 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
 
 
     public static ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException{
-        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl (filename);
+        ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
         try {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            String line;
+            Scanner input = new Scanner(new File(filename));
 
-            while ((line=br.readLine())!= null) {
+            while (input.hasNext()) {
+                String line = input.nextLine();
                 char begin = line.charAt(0);
                 //make sure the line isn't a comment or an empty line
                 if (begin!='#'&&String.valueOf(begin)!=String.valueOf("")){

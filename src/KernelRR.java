@@ -52,7 +52,7 @@ public class KernelRR implements Kernel {
             case EXECVE:
                 {
                     ProcessControlBlock pcb = loadProgram((String)varargs[0]);
-                    if (pcb!=null) {
+                    if (!pcb.equals(null)) {
                         pcb.setPriority(Integer.parseInt(""+varargs[1]));
                         readyQueue.add(pcb);
                         if (Config.getCPU().isIdle()){

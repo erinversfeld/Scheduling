@@ -51,7 +51,7 @@ public class FCFSKernel implements Kernel {
             case EXECVE:
             {
                 ProcessControlBlock pcb = loadProgram((String)varargs[0]);
-                if (pcb!=null) {
+                if (!pcb.equals(null)) {
                     readyQueue.add(pcb);
                     if (Config.getCPU().isIdle()){
                         dispatch();
@@ -101,8 +101,7 @@ public class FCFSKernel implements Kernel {
 
     private static ProcessControlBlock loadProgram(String filename) {
         try {
-            ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
-            return pcb.loadProgram(filename);
+            return ProcessControlBlockImpl.loadProgram(filename);
         }
         catch (FileNotFoundException fileExp) {
             return null;
