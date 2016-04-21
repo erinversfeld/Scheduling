@@ -53,9 +53,9 @@ public class KernelRR implements Kernel {
                 {
                     ProcessControlBlock pcb = loadProgram((String)varargs[0]);
                     if (!pcb.equals(null)) {
-                        pcb.setPriority(Integer.parseInt(""+varargs[1]));
+                        pcb.setPriority((Integer)varargs[1]);
                         readyQueue.add(pcb);
-                        if (Config.getCPU().isIdle()){
+                        if (cpu.isIdle()){
                             dispatch();
                             int pid = cpu.getCurrentProcess().getPID();
                             systemTimer.scheduleInterrupt(slice, this, pid);
@@ -73,7 +73,8 @@ public class KernelRR implements Kernel {
                     ioDevice.requestIO((Integer)varargs[1], pcb, this);
                     pcb.setState(WAITING);
                     if(!pcb.equals(null)){
-                        systemTimer.cancelInterrupt(pcb.getPID());
+                        int pid = pcb.getPID();
+                        systemTimer.cancelInterrupt(pid);
                     }
                     dispatch();
                     if(cpu.getCurrentProcess()!=null){
@@ -115,7 +116,7 @@ public class KernelRR implements Kernel {
                     cpu.contextSwitch(readyQueue.poll());
                     ProcessControlBlock curr = cpu.getCurrentProcess();
                     curr.setState(RUNNING);
-                    int pid = cpu.getCurrentProcess().getPID();
+                    int pid = curr.getPID();
                     systemTimer.scheduleInterrupt(slice, this, pid);
                 }
                 break;
@@ -123,7 +124,7 @@ public class KernelRR implements Kernel {
                 ProcessControlBlock pcb = (ProcessControlBlock)varargs[1];
                 readyQueue.add(pcb);
                 pcb.setState(READY);
-                if(Config.getCPU().isIdle()){
+                if(cpu.isIdle()){
                     dispatch();
                     int pid = cpu.getCurrentProcess().getPID();
                     systemTimer.scheduleInterrupt(slice, this, pid);
