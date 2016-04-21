@@ -9,7 +9,7 @@ public class SimulateFCFS {
 
     public static void main(String[] args){
         //set up parameters for simulation using user input
-        print("*** FCFS ***");
+        System.out.println("*** FCFS ***");
         Scanner s = new Scanner(System.in);
         print("Enter configuration file name: ");
         String config_filename = s.nextLine();
@@ -49,6 +49,6 @@ public class SimulateFCFS {
      * @param s the string you want printed
      */
     private static void print(String s){
-        System.out.print(s.trim());
+        System.out.print(s);
     }
 }
