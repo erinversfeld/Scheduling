@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
- * Created by Erin on 4/18/2016.
+ * A datastructure which controls the flow through a program's instructions
  */
 public class ProcessControlBlockImpl implements ProcessControlBlock {
-    private static int PID = 0;
+    private static int pid = 0;
     private String programName;
     private int priority = -1;
     private Instruction curr_instruction;
@@ -17,7 +17,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
     private State state;
 
     public ProcessControlBlockImpl (String name){
-        this.PID = PID;
+        this.pid = pid;
         programName = name;
     }
 
@@ -34,7 +34,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
      */
     @Override
     public int getPID() {
-        return PID;
+        return pid;
     }
 
     /**
@@ -120,6 +120,13 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         return "process(pid="+this.getPID()+", state="+this.getState()+", name=\""+this.getProgramName()+"\")";}
 
 
+    /**
+     * Loads instructions from a program into a pcb
+     * @param filename the program whose instructions need to be loaded
+     * @return a pcb containing the instructions contained by the program
+     * @throws FileNotFoundException if the program is not available
+     * @throws IOException isn't thrown by a scanner, but would have been thrown if I'd stayed with bufferedReader
+     */
     public static ProcessControlBlock loadProgram(String filename) throws FileNotFoundException, IOException{
         ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
         try {
@@ -149,7 +156,7 @@ public class ProcessControlBlockImpl implements ProcessControlBlock {
         } catch (IOException ie) {
             throw ie;
         }
-        PID++;
+        pid++;
         pcb.start();
         return pcb;
     }

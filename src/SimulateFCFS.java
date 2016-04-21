@@ -3,11 +3,12 @@ import simulator.*;
 import java.util.Scanner;
 
 /**
- * Created by Erin on 18/04/2016.
+ * Driver class for the first come first serve simulation
  */
 public class SimulateFCFS {
 
     public static void main(String[] args){
+        //set up parameters for simulation using user input
         print("*** FCFS ***");
         Scanner s = new Scanner(System.in);
         print("Enter configuration file name: ");
@@ -25,6 +26,7 @@ public class SimulateFCFS {
             print("*** Trace ***");
         }
 
+        //init kernel
         final Kernel kernel = new FCFSKernel();
 
         //init trace
@@ -35,12 +37,17 @@ public class SimulateFCFS {
         Config.buildConfiguration(config_filename);
         Config.run();
 
+        //output results
         System.out.println("\n*** Results ***");
         System.out.println(Config.getSystemTimer().toString());
         print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
         System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
 
+    /**
+     * Helper method so that I don't have to type out System.out.print every time
+     * @param s the string you want printed
+     */
     private static void print(String s){
         System.out.print(s.trim());
     }
