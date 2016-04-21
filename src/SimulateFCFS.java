@@ -1,35 +1,33 @@
-import simulator.Config;
-import simulator.Kernel;
-import simulator.TRACE;
+import simulator.*;
 
 import java.util.Scanner;
 
 /**
- * A class for simulating the scheduling of processes on an operating system
+ * Created by Erin on 18/04/2016.
  */
-
 public class SimulateFCFS {
-    public static void main(String[] args){
-        //Get user input
-        System.out.println("*** FCFS Simulator ***");
-        Scanner input = new Scanner(System.in);
-        print("Enter configuration file name: ");
-        String config_filename = input.nextLine();
-        print("Enter cost of system call: ");
-        int cost_syscall = input.nextInt();
-        System.out.print("Enter cost of context switch: ");
-        int cost_context_switch = input.nextInt();
-        print("Enter trace level: ");
-        int trace_level = input.nextInt();
-        input.close();
 
-        //if there's a trace, print this line
+    public static void main(String[] args){
+        print("*** FCFS ***");
+        Scanner s = new Scanner(System.in);
+        print("Enter configuration file name: ");
+        String config_filename = s.nextLine();
+        print("Enter cost of system call: ");
+        int cost_syscall = s.nextInt();
+        print("Enter cost of context switch: ");
+        int cost_context_switch = s.nextInt();
+        print("Enter trace level: ");
+        int trace_level = s.nextInt();
+        s.close();
+
+        //check if there'll be a trace printed out
         if (trace_level>0){
-            System.out.println("\n*** Trace ***");
+            print("*** Trace ***");
         }
 
-        //init kernel
-        Kernel kernel = new FCFSKernel();
+//        EventQueue eventQueue = new EventQueue();
+//        SystemTimerImpl systemTimer = new SystemTimerImpl();
+        final Kernel kernel = new FCFSKernel();
 
         //init trace
         TRACE.SET_TRACE_LEVEL(trace_level);
@@ -39,18 +37,13 @@ public class SimulateFCFS {
         Config.buildConfiguration(config_filename);
         Config.run();
 
-        //output
-        System.out.println("\n*** Results ***");
-        System.out.println(Config.getSystemTimer().toString());
-        print("Context switches: "+Config.getCPU().getContextSwitches()+"\n");
-        System.out.printf("CPU utilization: %.2f\n",((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
+        print("*** Results ***");
+        print(Config.getSystemTimer().toString());
+        print("Context switches: "+Config.getCPU().getContextSwitches());
+        System.out.printf("CPU utilization: %.2f\n", ((double)Config.getSystemTimer().getUserTime())/Config.getSystemTimer().getSystemTime()*100);
     }
 
-    /**
-     * A helper method to prvent me typing out that long as line each time
-     * @param s the string you want printed
-     */
-    public static void print(String s){
-        System.out.print(s);
+    private static void print(String s){
+        System.out.println(s.trim());
     }
 }

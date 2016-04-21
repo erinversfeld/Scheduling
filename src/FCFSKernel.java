@@ -9,7 +9,8 @@ import static simulator.ProcessControlBlock.State.*;
 //
 
 /**
- * Concrete Kernel type for the execution of a first come first serve simulation of process scheduling in an operating system.
+ * Concrete Kernel type
+ *
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -22,25 +23,23 @@ public class FCFSKernel implements Kernel {
     }
 
     private ProcessControlBlock dispatch() {
-        CPU cpu = Config.getCPU();
-        ProcessControlBlock prev_process = cpu.getCurrentProcess();
-        ProcessControlBlock next_process;
+        ProcessControlBlockImpl prev_process = (ProcessControlBlockImpl) Config.getCPU().getCurrentProcess();
+        ProcessControlBlockImpl next_process;
 
         if(!readyQueue.isEmpty()) {
-            next_process = readyQueue.poll();
+            next_process = (ProcessControlBlockImpl) readyQueue.poll();
             next_process.setState(READY);
-            cpu.contextSwitch(next_process);
+            Config.getCPU().contextSwitch(next_process);
         }
         else{
 
-            cpu.contextSwitch(null);
+            Config.getCPU().contextSwitch(null);
         }
         return prev_process;
 
     }
 
     public int syscall(int number, Object... varargs) {
-        CPU cpu = Config.getCPU();
         int result = 0;
         switch (number) {
             case MAKE_DEVICE:
@@ -54,7 +53,7 @@ public class FCFSKernel implements Kernel {
                 ProcessControlBlock pcb = loadProgram((String)varargs[0]);
                 if (pcb!=null) {
                     readyQueue.add(pcb);
-                    if (cpu.isIdle()){
+                    if (Config.getCPU().isIdle()){
                         dispatch();
                     }
                 }
@@ -65,10 +64,8 @@ public class FCFSKernel implements Kernel {
             break;
             case IO_REQUEST:
             {
-                ProcessControlBlock pcb = cpu.getCurrentProcess();
-                //get the appropriate ioDevice
+                ProcessControlBlock pcb = Config.getCPU().getCurrentProcess();
                 IODevice ioDevice = Config.getDevice((Integer)varargs[0]);
-                //process the ioRequest
                 ioDevice.requestIO((Integer)varargs[1], pcb, this);
                 pcb.setState(WAITING);
                 dispatch();
@@ -76,8 +73,7 @@ public class FCFSKernel implements Kernel {
             break;
             case TERMINATE_PROCESS:
             {
-                ProcessControlBlock pcb = cpu.getCurrentProcess();
-                pcb.setState(TERMINATED);
+                Config.getCPU().getCurrentProcess().setState(TERMINATED);
                 dispatch();
             }
             break;
@@ -88,16 +84,13 @@ public class FCFSKernel implements Kernel {
     }
 
     public void interrupt(int interruptType, Object... varargs){
-        CPU cpu = Config.getCPU();
         switch (interruptType) {
             case TIME_OUT:
                 throw new IllegalArgumentException("FCFSKernel:interrupt("+interruptType+"...): this kernel does not support timeouts.");
             case WAKE_UP:
-                //huh, who would've known that you would have to cast an object to a pcb...
-                ProcessControlBlock pcb = (ProcessControlBlock)varargs[1];
-                //put the process back onto the readyQ
+                ProcessControlBlockImpl pcb = (ProcessControlBlockImpl)varargs[1];
                 readyQueue.add(pcb);
-                if(cpu.isIdle()){
+                if(Config.getCPU().isIdle()){
                     dispatch();
                 }
                 break;
@@ -108,7 +101,8 @@ public class FCFSKernel implements Kernel {
 
     private static ProcessControlBlock loadProgram(String filename) {
         try {
-            return ProcessControlBlockImpl.loadProgram(filename);
+            ProcessControlBlockImpl pcb = new ProcessControlBlockImpl(filename);
+            return pcb.loadProgram(filename);
         }
         catch (FileNotFoundException fileExp) {
             return null;
@@ -118,4 +112,3 @@ public class FCFSKernel implements Kernel {
         }
     }
 }
-

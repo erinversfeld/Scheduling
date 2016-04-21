@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class SimulateRR {
     public static void main(String[] args){
         //Read info from screen/user
-        System.out.println("*** FCFS Simulator ***");
+        System.out.println("*** RR Simulator ***");
         Scanner scan = new Scanner(System.in);
         print("Enter configuration file name: ");
         String config_filename = scan.nextLine();

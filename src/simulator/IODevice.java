@@ -3,8 +3,10 @@ import java.util.HashMap;
 import java.util.Map;
 /**
  * Simulation of an IO device. A device has an id and type name (e.g. 'printer'). Processes may make IO requests.
+ * <p>
  * It is expected that an IO request is blocking i.e. the calling process will be removed from the CPU
  * while waiting for the request to complete.
+ *
  * @author Stephan Jamieson
  * @version 8/3/15
  */
@@ -14,10 +16,6 @@ public class IODevice {
     private String name;
     private long freeTime;
     private Map<Integer, ProcessControlBlock> queue;
-
-    public ProcessControlBlock getProcess(){
-        return queue.get(ID);
-    }
 
     /**
      * Create a device with the given id and name (e.g. 'disk').
@@ -38,11 +36,15 @@ public class IODevice {
      */
     public int getID() { return ID; }
 
+    public ProcessControlBlock getProcess(){
+        return queue.get(ID);
+    }
+
     long getFreeTime() { return freeTime; }
     void setFreeTime(long systemTime) { freeTime = systemTime; }
 
     /**
-     * Make an IO request of the given duration, calling the given interrupt handler 
+     * Make an IO request of the given duration, calling the given interrupt handler
      * when the request is complete.
      */
     public void requestIO(int duration, final ProcessControlBlock process, final InterruptHandler handler) {

@@ -1,6 +1,7 @@
-package simulator; 
+package simulator;
 /**
- * Interface for handling the processing of events
+ *
+ *
  * @author Stephan Jamieson
  * @version 8/3/15
  */
