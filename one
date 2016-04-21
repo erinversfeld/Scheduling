@@ -1,0 +1,32 @@
+# Program name: one
+# CPU Generator (lambda=1.0, lower_bound=1, upper_bound=1000)
+# IO (lambda=9.0, lower_bound=100, upper_bound=10000, devices=[1, 2, 3, 4])
+CPU 55
+IO 222 3
+CPU 278
+IO 591 1
+CPU 342
+IO 2618 2
+CPU 313
+IO 580 3
+CPU 68
+IO 574 4
+CPU 582
+IO 1725 1
+CPU 201
+IO 1170 1
+CPU 369
+IO 567 3
+CPU 391
+IO 1096 3
+CPU 665
+IO 201 1
+CPU 127
+IO 1156 1
+CPU 767
+IO 619 4
+CPU 220
+IO 291 1
+CPU 200
+IO 1121 3
+CPU 195

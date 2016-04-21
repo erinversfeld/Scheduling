@@ -1,0 +1,36 @@
+# Program name: nine.prg
+# CPU Generator (lambda=9.0, lower_bound=45, upper_bound=2985)
+# IO (lambda=1.0, lower_bound=35, upper_bound=5925, devices=[5, 36])
+CPU 294
+IO 5751 36
+CPU 353
+IO 5710 5
+CPU 125
+IO 264 36
+CPU 1478
+IO 973 36
+CPU 358
+IO 1514 36
+CPU 229
+IO 1411 36
+CPU 347
+IO 3720 5
+CPU 492
+IO 1428 36
+CPU 443
+IO 2687 5
+CPU 887
+IO 392 36
+CPU 59
+IO 623 5
+CPU 659
+IO 1755 36
+CPU 647
+IO 1241 5
+CPU 1122
+IO 455 5
+CPU 367
+IO 577 36
+CPU 505
+IO 2363 5
+CPU 118
